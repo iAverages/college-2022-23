@@ -21,4 +21,3 @@ npm config set strict-ssl false
 echo
 echo You will need to run this setup script for every terminal session where you want to use node
 echo All changes (except strict-ssl setting) are only applied to the terminal session where this script is executed
-
