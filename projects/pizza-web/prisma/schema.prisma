@@ -78,7 +78,7 @@ model Orders {
 model Items {
   id         String       @id @default(cuid())
   name       String
-  price      Int
+  price      Float
   desc       String
   created_at DateTime     @default(now())
   updated_at DateTime     @updatedAt
