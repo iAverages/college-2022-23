@@ -56,6 +56,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Orders        Orders[]
 }
 
 model VerificationToken {
@@ -66,9 +67,28 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Pizzas {
-  id    String @id @default(cuid())
-  name  String
-  price Int
-  desc  String
+model Orders {
+  id         String       @id @default(cuid())
+  customer   User         @relation(fields: [userId], references: [id])
+  created_at DateTime     @default(now())
+  userId     String
+  OrderItems OrderItems[]
+}
+
+model Items {
+  id         String       @id @default(cuid())
+  name       String
+  price      Int
+  desc       String
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  OrderItems OrderItems[]
+}
+
+model OrderItems {
+  id       Int    @id @default(autoincrement())
+  order_id Orders @relation(fields: [ordersId], references: [id])
+  item_id  Items  @relation(fields: [itemsId], references: [id])
+  ordersId String
+  itemsId  String
 }
