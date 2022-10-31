@@ -10,7 +10,7 @@ export const authRouter = router({
     getPreviousOrders: protectedProcedure.query(({ ctx }) => {
         const { user } = ctx.session;
     }),
-    getAllPizzas: protectedProcedure.query(({ ctx }) => {
-        return ctx.prisma.pizzas.findMany({});
+    getAllItems: protectedProcedure.query(({ ctx }) => {
+        return ctx.prisma.items.findMany({});
     }),
 });

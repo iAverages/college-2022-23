@@ -21,7 +21,11 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         );
     }
 
-    return <Nav>{children}</Nav>;
+    return (
+        <Nav>
+            <div className="mx-10 my-5">{children}</div>
+        </Nav>
+    );
 };
 
 export default Layout;
