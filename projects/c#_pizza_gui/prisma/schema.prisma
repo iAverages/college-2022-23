@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlserver"
+  url      = "sqlserver://localhost:1433;database=pizzers;user=sa;password=yourStrong(!)Password;encrypt=DANGER_PLAINTEXT"
+}
+
+model User {
+  id          String   @id @default(cuid())
+  name        String?
+  email       String?  @unique
+  password    String
+  salt        String
+  address     String
+  phoneNumber String
+  Orders      Orders[]
+}
+
+model Orders {
+  id               String       @id @default(cuid())
+  customer         User         @relation(fields: [userId], references: [id])
+  created_at       DateTime     @default(now())
+  userId           String
+  price            Float
+  billing_address  String
+  OrderItems       OrderItems[]
+  paymentMethodsId Int
+}
+
+model Items {
+  id         String       @id @default(cuid())
+  name       String
+  price      Float
+  desc       String
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  OrderItems OrderItems[]
+}
+
+model OrderItems {
+  id       Int    @id @default(autoincrement())
+  order_id Orders @relation(fields: [ordersId], references: [id])
+  item_id  Items  @relation(fields: [itemsId], references: [id])
+  ordersId String
+  itemsId  String
+}
