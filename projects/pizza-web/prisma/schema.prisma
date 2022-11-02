@@ -68,14 +68,15 @@ model VerificationToken {
 }
 
 model Orders {
-  id              String       @id @default(cuid())
-  customer        User         @relation(fields: [userId], references: [id])
-  created_at      DateTime     @default(now())
-  userId          String
-  price           Float
-  billing_address String
-  payment_method  String
-  OrderItems      OrderItems[]
+  id               String         @id @default(cuid())
+  customer         User           @relation(fields: [userId], references: [id])
+  created_at       DateTime       @default(now())
+  userId           String
+  price            Float
+  billing_address  String
+  payment_method   PaymentMethods @relation(fields: [paymentMethodsId], references: [id])
+  OrderItems       OrderItems[]
+  paymentMethodsId Int
 }
 
 model Items {
@@ -94,4 +95,11 @@ model OrderItems {
   item_id  Items  @relation(fields: [itemsId], references: [id])
   ordersId String
   itemsId  String
+}
+
+model PaymentMethods {
+  id      Int      @id @default(autoincrement())
+  name    String
+  enabled Boolean
+  Orders  Orders[]
 }
