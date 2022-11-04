@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfCheckin", "SelfCheckin.csproj", "{77DFB43C-88C3-4F06-A5B8-FEECD069B924}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77DFB43C-88C3-4F06-A5B8-FEECD069B924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DFB43C-88C3-4F06-A5B8-FEECD069B924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DFB43C-88C3-4F06-A5B8-FEECD069B924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DFB43C-88C3-4F06-A5B8-FEECD069B924}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82FC5284-2D1C-4AD1-9DD7-2D70F4FC58B4}
+	EndGlobalSection
+EndGlobal
