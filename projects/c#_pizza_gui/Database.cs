@@ -6,7 +6,8 @@ namespace Pizzas
 {
     class Database
     {
-        private static readonly string ConnectionString = @$"Data Source={Environment.MachineName}\SQLEXPRESS;Database=pizzas;Trusted_Connection=true";
+        private static readonly string ConnectionString = @$"Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;";
+
         public static bool CheckValidLogin(string email, string password)
         {
             using SqlConnection conn = new SqlConnection();
@@ -14,7 +15,7 @@ namespace Pizzas
             conn.ConnectionString = Database.ConnectionString;
             conn.Open();
 
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM customers WHERE email = @email;", conn);
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Customers WHERE email = @email;", conn);
 
             sqlCommand.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar)).Value = email;
             using SqlDataReader reader = sqlCommand.ExecuteReader();
@@ -47,7 +48,7 @@ namespace Pizzas
                 conn.ConnectionString = Database.ConnectionString;
                 conn.Open();
 
-                SqlCommand sqlCommand = new SqlCommand("INSERT INTO customers(name, password, salt, email, address, phoneNumber) VALUES(@name, @password, @salt, @email, @address, @phoneNumber)", conn);
+                SqlCommand sqlCommand = new SqlCommand("INSERT INTO User(name, password, salt, email, address, phoneNumber) VALUES(@name, @password, @salt, @email, @address, @phoneNumber)", conn);
 
                 sqlCommand.Parameters.Add(new SqlParameter("@name", name));
                 sqlCommand.Parameters.Add(new SqlParameter("@password", hashedPassword));
@@ -60,7 +61,7 @@ namespace Pizzas
             {
                 if (sqlError.Number == 2601 || sqlError.Number == 2627)
                 {
-                    throw new DatabaseError("");
+                    throw new DatabaseError(DatabaseErrors.EMAIL_EXISTS);
                 }
             }
         }
