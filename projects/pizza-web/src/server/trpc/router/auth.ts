@@ -24,4 +24,37 @@ export const authRouter = router({
             include: { OrderItems: { include: { item_id: true, order_id: true } }, customer: true },
         });
     }),
+    // getActivePaymentMethods: protectedProcedure.query(({ ctx }) => {
+    //     return ctx.prisma.paymentMethods.findMany({ where: { enabled: true } });
+    // }),
+    createOrder: protectedProcedure
+        .input(
+            z.object({
+                items: z.string().array(),
+                address: z.string(),
+                paymentMethod: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const items = await ctx.prisma.items.aggregate({
+                _count: {
+                    price: true,
+                },
+                where: {
+                    id: { in: input.items },
+                },
+            });
+            const { price } = items._count;
+            console.log(price);
+            return ctx.prisma.orders.create({
+                data: {
+                    billing_address: input.address,
+                    price,
+                    customer: {
+                        connect: { id: ctx.session.user.id },
+                    },
+                    payment_method: input.paymentMethod,
+                },
+            });
+        }),
 });

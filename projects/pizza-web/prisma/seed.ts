@@ -45,36 +45,36 @@ async function main() {
     }
 
     console.log("Creating user with 2 orders");
-    const bob = await prisma.user.upsert({
-        where: { email: "bob@avrg.dev" },
-        update: {},
-        create: {
-            email: "bob@avrg.dev",
-            name: "Bob",
-            Orders: {
-                create: [
-                    {
-                        price: 5.3,
-                        billing_address: "Some random address",
-                        payment_method: { connect: { id: debitCard.id } },
-                        OrderItems: {
-                            create: [
-                                {
-                                    item_id: { connect: dbItems[0] },
-                                },
-                                {
-                                    item_id: { connect: dbItems[1] },
-                                },
-                            ],
-                        },
-                    },
-                    { price: 15.43, billing_address: "Some other random address", payment_method: { connect: { id: paypal.id } } },
-                ],
-            },
-        },
-        include: { Orders: true },
-    });
-    console.log({ bob });
+    // const bob = await prisma.user.upsert({
+    //     where: { email: "bob@avrg.dev" },
+    //     update: {},
+    //     create: {
+    //         email: "bob@avrg.dev",
+    //         name: "Bob",
+    //         Orders: {
+    //             create: [
+    //                 {
+    //                     price: 5.3,
+    //                     billing_address: "Some random address",
+    //                     payment_method: { connect: { id: debitCard.id } },
+    //                     OrderItems: {
+    //                         create: [
+    //                             {
+    //                                 item_id: { connect: dbItems[0] },
+    //                             },
+    //                             {
+    //                                 item_id: { connect: dbItems[1] },
+    //                             },
+    //                         ],
+    //                     },
+    //                 },
+    //                 { price: 15.43, billing_address: "Some other random address", payment_method: { connect: { id: paypal.id } } },
+    //             ],
+    //         },
+    //     },
+    //     include: { Orders: true },
+    // });
+    // console.log({ bob });
 }
 
 main()

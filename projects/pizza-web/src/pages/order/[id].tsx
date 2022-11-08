@@ -41,7 +41,9 @@ const ViewOrder = () => {
                 </div>
                 <div className="flex bg-base-200 p-10">
                     {orderData?.OrderItems.map((item) => (
-                        <div key={item.id}>{/* <div>{item.}</div> */}</div>
+                        <div key={item.id}>
+                            <div>{item.id}</div>
+                        </div>
                     ))}
                 </div>
             </div>
