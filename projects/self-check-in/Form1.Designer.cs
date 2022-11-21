@@ -30,7 +30,7 @@
         {
             this.firstName = new System.Windows.Forms.Label();
             this.lastName = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.lastNameInput = new System.Windows.Forms.TextBox();
             this.date = new System.Windows.Forms.DateTimePicker();
             this.appointmentsLabel = new System.Windows.Forms.Label();
             this.submit = new System.Windows.Forms.Button();
@@ -55,15 +55,17 @@
             this.lastName.TabIndex = 3;
             this.lastName.Text = "Last Name";
             // 
-            // textBox2
+            // lastNameInput
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 90);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(200, 23);
-            this.textBox2.TabIndex = 2;
+            this.lastNameInput.Location = new System.Drawing.Point(12, 90);
+            this.lastNameInput.Name = "lastNameInput";
+            this.lastNameInput.Size = new System.Drawing.Size(200, 23);
+            this.lastNameInput.TabIndex = 2;
             // 
             // date
             // 
+            this.date.CustomFormat = "yyyy/MM/dd";
+            this.date.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.date.Location = new System.Drawing.Point(12, 44);
             this.date.Name = "date";
             this.date.Size = new System.Drawing.Size(200, 23);
@@ -107,7 +109,7 @@
             this.Controls.Add(this.appointmentsLabel);
             this.Controls.Add(this.date);
             this.Controls.Add(this.lastName);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.lastNameInput);
             this.Controls.Add(this.firstName);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -120,7 +122,7 @@
         #endregion
         private Label firstName;
         private Label lastName;
-        private TextBox textBox2;
+        private TextBox lastNameInput;
         private DateTimePicker date;
         private Label appointmentsLabel;
         private Button submit;
