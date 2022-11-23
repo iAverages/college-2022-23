@@ -9,7 +9,7 @@ ON patients.id = appointments.patient_id
 INNER JOIN doctors
 ON doctors.id = appointments.doctor_id
 WHERE patients.last_name = @last_name
-AND patient.date_of_birth = @dob
+AND patients.date_of_birth = @dob
 ";
     }
 }

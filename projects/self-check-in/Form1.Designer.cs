@@ -64,6 +64,8 @@
             // 
             // date
             // 
+            this.date.CustomFormat = "yyyy-MM-dd";
+            this.date.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.date.Location = new System.Drawing.Point(12, 44);
             this.date.Name = "date";
             this.date.Size = new System.Drawing.Size(200, 23);

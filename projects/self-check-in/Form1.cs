@@ -15,6 +15,7 @@ namespace SelfCheckin
 
         private void Submit(object sender, EventArgs e)
         {
+            MessageBox.Show(this.date.Text);
             MessageBox.Show(Database.GetAppointment(this.lastName.Text, this.date.Text));
             this.appointments.Items.Add("");
             this.appointmentsLabel.Show();
