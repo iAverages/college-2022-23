@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace SelfCheckin
 {
     public partial class Form1 : Form
@@ -15,9 +17,19 @@ namespace SelfCheckin
 
         private void Submit(object sender, EventArgs e)
         {
-            MessageBox.Show(this.date.Text);
-            MessageBox.Show(Database.GetAppointment(this.lastName.Text, this.date.Text));
-            this.appointments.Items.Add("");
+            string[] data = Database.GetAppointment(this.lastNameInput.Text, this.date.Text);
+            Debug.WriteLine(data.Length);
+            if (data.Length == 0)
+            {
+                MessageBox.Show("You do not have an appointment, please go to reception");
+                return;
+            }
+
+            foreach (var row in data)
+            {
+                this.appointments.Items.Add(row);
+            }
+
             this.appointmentsLabel.Show();
             this.appointments.Show();
         }
