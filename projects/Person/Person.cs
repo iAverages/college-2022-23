@@ -30,11 +30,10 @@ namespace Person
             this._niNumber = niNumber;
         }
 
-
         /// <summary>
         /// Greets the person
         /// </summary>
-        public void greet()
+        public virtual void greet()
         {
             Console.WriteLine($"Hello {this.FirstName} {this.Surname}, you are {this.Age} years old.");
         }
