@@ -12,12 +12,12 @@
 
         public void buildWall()
         {
-            Console.WriteLine("Worker Goblin build a wall");
+            Console.WriteLine("Worker Goblin built a wall");
         }
 
         public void buildHouse()
         {
-            Console.WriteLine("Worker Goblin build a house");
+            Console.WriteLine("Worker Goblin built a house");
         }
 
         public void mineGold()

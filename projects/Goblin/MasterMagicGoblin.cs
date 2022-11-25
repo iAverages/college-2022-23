@@ -10,7 +10,7 @@
 
         public void teachSpell()
         {
-
+            Console.WriteLine("Master magic goblin is teaching a spell");
         }
     }
 }
