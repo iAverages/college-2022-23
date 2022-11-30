@@ -1,7 +1,10 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import * as z from "zod";
+import Form from "../components/form";
+import Input from "../components/input";
 import useForm from "../hooks/useForm";
+// import { useForm } from "react-hook-form";
 import { trpc } from "../utils/trpc";
 
 const schema = z
@@ -20,7 +23,8 @@ const schema = z
         }
     });
 
-type SignUpForm = z.t;
+type SignUpForm = z.infer<typeof schema>;
+
 const Home: NextPage = () => {
     const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
 
@@ -28,7 +32,8 @@ const Home: NextPage = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<>(schema);
+        clearErrors
+    } = useForm<SignUpForm>(schema);
 
     return (
         <>
@@ -41,13 +46,21 @@ const Home: NextPage = () => {
                 <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">Sign up</h1>
                     <div className="flex">
-                        <form className="flex flex-col gap-1" onSubmit={handleSubmit((d) => console.log(d))}>
-                            <input {...register("")} />
-                            {errors.name?.message && <p>{errors.name?.message}</p>}
-                            <input {...register("age", { valueAsNumber: true })} />
-                            {errors.age?.message && <p>{errors.age?.message}</p>}
+                        <Form onSubmit={handleSubmit((d) => console.log(d))}>
+                            <Input errors={errors} {...register("username")} />
+                            <Input errors={errors} {...register("email")} />
+                            <Input errors={errors} {...register("password")} />
+                            <Input errors={errors} {...register("confirmPassword")} />
+                            {/* <input {...register("username")} /> */}
+                            {/* {errors.username?.message && <p>{errors.username.message}</p>} */}
+                            {/* <input {...register("email")} />
+                            {errors.email?.message && <p>{errors.email.message}</p>}
+                            <input {...register("password")} />
+                            {errors.password?.message && <p>{errors.password.message}</p>}
+                            <input {...register("confirmPassword")} />
+                            {errors.confirmPassword?.message && <p>{errors.confirmPassword.message}</p>} */}
                             <input type="submit" value="Submit" className="bg-purple-400 p-2" />
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </main>
