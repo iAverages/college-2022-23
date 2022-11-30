@@ -3,7 +3,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
-import bcry
+import { checkPassword } from "../../../utils/hash";
+
 export const authOptions: NextAuthOptions = {
     // Include user.id on session
     callbacks: {
@@ -23,32 +24,23 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 if (!credentials) return null;
 
-                prisma.user.findFirst({
+                const user = await prisma.user.findFirst({
                     where: {
                         email: {
-                            equals: credentials.email
+                            equals: credentials.email,
                         },
-                        password: {
-                            equals: credentials.password
-                        }
-                    }
-                })
-                const res = await fetch("/your/endpoint", {
-                    method: "POST",
-                    body: JSON.stringify(credentials),
-                    headers: { "Content-Type": "application/json" },
+                    },
                 });
-                const user = await res.json();
 
-                // If no error and we have user data, return it
-                if (res.ok && user) {
-                    return user;
-                }
-                // Return null if user data could not be retrieved
-                return null;
+                // No user found in database
+                if (!user) return null;
+
+                if (!(await checkPassword(user.password, credentials.password))) return null;
+
+                return user;
             },
         }),
     ],
