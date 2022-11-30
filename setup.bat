@@ -16,7 +16,16 @@ set path=%path%;%cd%\bin\node-v16.18.0-win-x64
 
 echo Setting strict-ssl to false in global config and ignoring TLS rejection errors
 set NODE_TLS_REJECT_UNAUTHORIZED=0
-npm config set strict-ssl false 
+
+@REM This makes the script stop if strict-sll is already false, running this command in 
+@REM another cmd instance makes it not exit the script
+cmd.exe /c npm config set strict-ssl false 
+
+echo Installing yarn and pnpm
+npm install -g pnpm yarn
+
+echo Setting strict-ssl to false in global config for yarn
+yarn config set strict-ssl false
 
 echo
 echo You will need to run this setup script for every terminal session where you want to use node
