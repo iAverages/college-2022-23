@@ -22,10 +22,10 @@ set NODE_TLS_REJECT_UNAUTHORIZED=0
 cmd.exe /c npm config set strict-ssl false 
 
 echo Installing yarn and pnpm
-npm install -g pnpm yarn
+cmd.exe /c npm install -g pnpm yarn
 
 echo Setting strict-ssl to false in global config for yarn
-yarn config set strict-ssl false
+cmd.exe /c yarn config set strict-ssl false
 
 echo
 echo You will need to run this setup script for every terminal session where you want to use node
