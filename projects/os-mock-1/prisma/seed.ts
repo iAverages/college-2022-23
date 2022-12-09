@@ -49,17 +49,25 @@ const prisma = new PrismaClient();
 
         const created = await prisma.course.create({
             data: course,
-            include: {
-                enrolledUsers: {
-                    where: {
-                        user: {
-                            id: user.id,
-                        },
+        });
+
+        console.log(`✅ Created course ${course.name} (${created.id})`);
+
+        await prisma.courseUser.create({
+            data: {
+                course: {
+                    connect: {
+                        id: created.id,
+                    },
+                },
+                user: {
+                    connect: {
+                        id: user.id,
                     },
                 },
             },
         });
 
-        console.log(`✅ Created course ${course.name} (${created.id})`);
+        console.log(`✅ Added ${user.name} (${user.id}) to ${course.name} (${created.id})`);
     }
 })();
