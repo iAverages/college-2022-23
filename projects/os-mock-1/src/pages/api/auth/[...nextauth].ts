@@ -7,7 +7,7 @@ import { env } from "../../../env/server.mjs";
 
 export const authOptions: NextAuthOptions = {
     pages: {
-        signIn: "/login"
+        signIn: "/login",
     },
 
     // Include user.id on session
