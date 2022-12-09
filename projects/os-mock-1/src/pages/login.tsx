@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Spinner from "../components/spinner/spinner";
+import Spinner from "@components/spinner/spinner";
 import { useSession, signIn } from "next-auth/react";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
             signIn("github");
         };
         run();
-    }, [status]);
+    }, [status, router]);
 
     return (
         <main className="bg-slate-900">
