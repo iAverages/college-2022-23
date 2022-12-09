@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { courseFilterSchema } from "../../../schema/courseFilterSchema";
+import ifTrue from "../../../utils/conditioanl";
 import { router, protectedProcedure } from "../trpc";
 
 export const coursesRouter = router({
@@ -12,34 +14,30 @@ export const coursesRouter = router({
             },
         });
     }),
-    enrolled: protectedProcedure
-        .input(
-            z.object({
-                all: z.boolean(),
-            })
-        )
-        .query(({ ctx, input }) => {
-            return ctx.prisma.course.findMany({
-                where: {
-                    enrolledUsers: {
-                        some: {
-                            user: {
-                                id: {
-                                    equals: ctx.session.user.id,
-                                },
+    enrolled: protectedProcedure.input(courseFilterSchema).query(({ ctx, input }) => {
+        return ctx.prisma.course.findMany({
+            where: {
+                enrolledUsers: {
+                    some: {
+                        user: {
+                            id: {
+                                equals: ctx.session.user.id,
                             },
                         },
                     },
-                    ...(input.all
-                        ? {}
-                        : {
-                              published: {
-                                  equals: true,
-                              },
-                          }),
                 },
-            });
-        }),
+                ...ifTrue(
+                    input.all,
+                    {
+                        published: {
+                            equals: true,
+                        },
+                    },
+                    {}
+                ),
+            },
+        });
+    }),
     enroll: protectedProcedure
         .input(
             z.object({

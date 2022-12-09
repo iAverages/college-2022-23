@@ -8,7 +8,9 @@ import { capital } from "../utils/stringFormat";
 
 const Courses = () => {
     const { data: sessionData } = useSession();
-    const { data } = useCourses();
+    const { data } = useCourses({
+        all: true
+    });
 
     return (
         <Layout>

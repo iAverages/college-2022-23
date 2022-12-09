@@ -1,7 +1,7 @@
-import type { inferProcedureInput, AnyQueryProcedure } from "@trpc/server";
-import { trpc } from "../utils/trpc";
+import type { CourseFilter } from "@schema/courseFilterSchema";
+import { trpc } from "@utils/trpc";
 
-const useCourses = (input: inferProcedureInput<AnyQueryProcedure>) => {
+const useCourses = (input: CourseFilter) => {
     return trpc.courses.enrolled.useQuery(input);
 };
 
