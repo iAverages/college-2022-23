@@ -1,8 +1,12 @@
 import type { CourseFilter } from "@schema/courseFilterSchema";
 import { trpc } from "@utils/trpc";
 
-const useCourses = (input: CourseFilter) => {
-    return trpc.courses.enrolled.useQuery(input);
+const useCourses = (filter: Partial<CourseFilter>) => {
+    const defaults: CourseFilter = {
+        all: false,
+        amount: 100,
+    };
+    return trpc.courses.enrolled.useQuery({ ...defaults, ...filter });
 };
 
 export default useCourses;

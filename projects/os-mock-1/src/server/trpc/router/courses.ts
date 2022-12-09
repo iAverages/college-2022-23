@@ -16,6 +16,7 @@ export const coursesRouter = router({
     }),
     enrolled: protectedProcedure.input(courseFilterSchema).query(({ ctx, input }) => {
         return ctx.prisma.course.findMany({
+            take: input.amount,
             where: {
                 enrolledUsers: {
                     some: {
