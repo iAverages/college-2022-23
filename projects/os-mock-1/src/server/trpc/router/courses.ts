@@ -7,6 +7,15 @@ export const coursesRouter = router({
     all: protectedProcedure.query(({ ctx }) => {
         return ctx.prisma.course.findMany();
     }),
+    get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+        return ctx.prisma.course.findFirst({
+            where: {
+                id: {
+                    equals: input,
+                },
+            },
+        });
+    }),
     active: protectedProcedure.query(({ ctx }) => {
         return ctx.prisma.course.findMany({
             where: {
