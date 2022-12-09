@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Sidebar from "./sidebar";
+import Navigation from "./nav";
 
 type LayoutProps = {
     children: ReactNode | ReactNode[];
@@ -8,7 +8,8 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div>
-            <Sidebar>{children}</Sidebar>
+            <Navigation />
+            <div>{children}</div>
         </div>
     );
 };
