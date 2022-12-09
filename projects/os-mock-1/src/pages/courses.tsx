@@ -1,4 +1,4 @@
-import { Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import { Container, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import CourseBox from "../components/courseBox";
 import Layout from "../components/layout";
@@ -9,12 +9,12 @@ import { capital } from "../utils/stringFormat";
 const Courses = () => {
     const { data: sessionData } = useSession();
     const { data } = useCourses({
-        all: true
+        all: true,
     });
 
     return (
         <Layout>
-            <main>
+            <Container maxW="2xl">
                 <Heading as="h1" size="4xl">
                     Welcome back, {capital(sessionData?.user?.name)}!
                 </Heading>
@@ -22,7 +22,7 @@ const Courses = () => {
                 <SimpleGrid spacing={4} templateColumns="repeat(auto-fill, minmax(200px, 1fr))">
                     {data?.map(CourseBox)}
                 </SimpleGrid>
-            </main>
+            </Container>
         </Layout>
     );
 };
