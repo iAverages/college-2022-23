@@ -2,12 +2,11 @@ import { Box, Divider, Heading, Container, Text } from "@chakra-ui/react";
 import Layout from "@components/layout";
 import Spinner from "@components/spinner/spinner";
 import useBreadcrumb from "@hooks/useBreadcrumb";
-import useCourse from "@hooks/useCourse";
-import useRouteParam from "@hooks/useRouteParam";
+import useCourseFromRoute from "@hooks/useCourseFromRoute";
 
 const Course = () => {
-    const courseId = useRouteParam("id");
-    const { data, isLoading } = useCourse(courseId);
+    const { data, isLoading } = useCourseFromRoute();
+
     useBreadcrumb({ href: "/courses", name: "Courses" });
 
     if (isLoading) {
