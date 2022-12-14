@@ -1,5 +1,4 @@
-import { Course, PrismaClient } from "@prisma/client";
-import { date } from "zod";
+import { type Course, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 (async () => {
@@ -28,6 +27,13 @@ const prisma = new PrismaClient();
             createdAt: new Date(),
             desc: "Computer Science learning course",
             name: "Computer Science",
+            published: true,
+            updatedAt: new Date(),
+        },
+        {
+            createdAt: new Date(),
+            desc: "cook food nerds",
+            name: "Cooking",
             published: true,
             updatedAt: new Date(),
         },
