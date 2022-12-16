@@ -3,10 +3,11 @@ import clsx from "clsx";
 
 type SpinnerProps = {
     fullScreen?: boolean;
+    className?: string;
 };
 
-const Spinner: React.FC<SpinnerProps> = ({ fullScreen = false }) => (
-    <div className={clsx({ "flex h-screen w-screen items-center justify-center": fullScreen })}>
+const Spinner: React.FC<SpinnerProps> = ({ fullScreen = false, className }) => (
+    <div className={clsx(className, { "flex h-screen w-screen items-center justify-center": fullScreen })}>
         <div className={style.ldsEllipsis}>
             <div></div>
             <div></div>
