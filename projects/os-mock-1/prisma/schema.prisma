@@ -69,6 +69,28 @@ model Course {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   enrolledUsers CourseUser[]
+  assignments   Assignment[]
+}
+
+model Assignment {
+  id        String     @id @default(cuid())
+  name      String
+  dueDate   DateTime
+  published Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  course    Course     @relation(fields: [courseId], references: [id])
+  documents Document[]
+
+  courseId String
+}
+
+model Document {
+  id           String      @id @default(cuid())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignmentId String?
 }
 
 model CourseUser {
@@ -94,6 +116,6 @@ model Role {
 model Permssions {
   id   String @id @default(cuid())
   role Role   @relation(fields: [roleId], references: [id])
-  
+
   roleId String
 }
