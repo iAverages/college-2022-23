@@ -1,7 +1,10 @@
 import { type Course, PrismaClient } from "@prisma/client";
+import ora, { type Ora } from "ora";
+
 const prisma = new PrismaClient();
 
 (async () => {
+    let spinner: Ora;
     const user = await prisma.user.findFirst();
 
     if (!user) {
@@ -53,11 +56,15 @@ const prisma = new PrismaClient();
             continue;
         }
 
+        spinner = ora(`Creating course ${course.name}`).start();
+
         const created = await prisma.course.create({
             data: course,
         });
 
-        console.log(`✅ Created course ${course.name} (${created.id})`);
+        spinner.succeed(`Created course ${course.name} (${created.id})`);
+
+        spinner = ora(`Adding ${user.name} (${user.id}) to ${course.name} (${created.id})`).start();
 
         await prisma.courseUser.create({
             data: {
@@ -74,6 +81,37 @@ const prisma = new PrismaClient();
             },
         });
 
-        console.log(`✅ Added ${user.name} (${user.id}) to ${course.name} (${created.id})`);
+        spinner.succeed(`Added ${user.name} (${user.id}) to ${course.name} (${created.id})`);
+
+        const numberOfAssignments = 5000;
+
+        spinner = ora(
+            `Creating ${numberOfAssignments} assignments for course ${course.name} (${created.id}). This might take a moment`
+        ).start();
+
+        await prisma.$transaction(
+            async () => {
+                const inserts = [];
+                for (let i = 0; i < numberOfAssignments; i++) {
+                    inserts.push(
+                        await prisma.assignment.create({
+                            data: {
+                                dueDate: new Date(),
+                                name: `Test assignment #${i}`,
+                                course: { connect: { id: created.id } },
+                            },
+                        })
+                    );
+                }
+
+                return inserts;
+            },
+            {
+                // Give each assignment 3 seconds to complete
+                timeout: numberOfAssignments * 1000 * 3,
+            }
+        );
+
+        spinner.succeed(`Created ${numberOfAssignments} assignments for course ${course.name} (${created.id})`);
     }
 })();

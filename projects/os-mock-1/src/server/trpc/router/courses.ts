@@ -16,6 +16,38 @@ export const coursesRouter = router({
             },
         });
     }),
+    assignments: protectedProcedure
+        .input(z.object({ courseId: z.string(), cursor: z.string().nullish() }))
+        .query(async ({ ctx, input }) => {
+            const limit = 50;
+            const { cursor, courseId } = input;
+            const items = await ctx.prisma.assignment.findMany({
+                where: {
+                    courseId: courseId,
+                },
+                orderBy: {
+                    dueDate: "desc",
+                },
+            });
+            const totalDBRows = await ctx.prisma.assignment.count({
+                where: {
+                    courseId: courseId,
+                },
+            });
+
+            let nextCursor: typeof cursor | undefined = undefined;
+            if (items.length > limit) {
+                const nextItem = items.pop();
+                nextCursor = nextItem?.id;
+            }
+            return {
+                items,
+                nextCursor,
+                meta: {
+                    totalDBRows,
+                },
+            };
+        }),
     active: protectedProcedure.query(({ ctx }) => {
         return ctx.prisma.course.findMany({
             where: {
