@@ -29,6 +29,7 @@ export const coursesRouter = router({
                     dueDate: "desc",
                 },
                 take: limit + 1,
+                cursor: cursor ? { id: cursor } : undefined,
             });
             const totalDBRows = await ctx.prisma.assignment.count({
                 where: {
