@@ -10,12 +10,17 @@ import { trpc } from "@utils/trpc";
 import type { SortingState } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useReactTable, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
+import Link from "next/link";
 
 const columnHelper = createColumnHelper<Assignment>();
 
 const columns = [
     columnHelper.accessor("name", {
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+            <Link href={`/course/${info.row.original.courseId}/assignment/${info.row.original.id}`}>
+                {info.getValue()}
+            </Link>
+        ),
         header: () => <span>Name</span>,
     }),
     columnHelper.accessor("dueDate", {
