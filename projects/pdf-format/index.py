@@ -1,7 +1,8 @@
 import sys
 import os
-from fpdf import FPDF, errors
 import pathspec
+import emoji
+from fpdf import FPDF, errors
 from pathlib import Path
 from html import escape
 from progress.bar import IncrementalBar
@@ -22,13 +23,19 @@ def errorAndExit(message: str):
     print(message)
     exit(1)
 
+HEADER_FOOTER_PADDING = 4
+
+def addPadding(text: str, paddingText: str, amount: int):
+    padding = paddingText * amount
+    return padding + text + padding
+
 
 def createHeader(fileName: str):
-    return f"START {fileName}<br/><br/>"
+    return addPadding(f"START {fileName}", "<br>", HEADER_FOOTER_PADDING)
 
 
 def createFooter(fileName: str):
-    return f"<br/><br/>END {fileName}<br/><br/>"
+    return addPadding(f"END {fileName}", "<br>", HEADER_FOOTER_PADDING)
 
 
 # writeContent to the final output
@@ -40,7 +47,8 @@ def writeContent(pdf: FPDF, fileName: str, contents: str):
         footer = createFooter(fileName)
         pdf.write_html(header + contents + footer)
     except Exception as e:
-        print(f"Failed to add {fileName} to final PDF:" + e)
+        print(f"Failed to add {fileName} to final PDF:")
+        print(e)
 
 
 # Check path has been provided by the user
@@ -78,46 +86,52 @@ def getExcludePaths():
 # Format file contents into valid HTML to be
 # rendered within PDF
 def getFormattedContents(file: Path):
-    try:
-        with file.open(mode='r', encoding="UTF-8") as f:
-            # Add pre tag to show code on page without formattting issues
-            formatted = "<pre>"
-            for contents in f.readlines():
-                for line in contents.split(os.linesep):
-                    line = escape(line)
-                    formatted += line
-            # Escape file contents so they are dispalyed correctly
-            return escape(formatted + "</pre>")
-    except UnicodeDecodeError as e:
-        print(f"{os.linesep}Skipping non text file ({file.name})")
-        print(e)
-        return None
-    # except Exception as e:
-    #     print(e)
-    #     return None
+    # lol
+    for encoding in ["UTF-8", "ascii"]: 
+        try:
+            with file.open(mode='r', encoding=encoding) as f:
+                # Add pre tag to show code on page without formattting issues
+                formatted = ""
+                for contents in f.readlines():
+                    for line in contents.split(os.linesep):
+                        line = escape(line)
+                        formatted += line
+                # Escape file contents so they are dispalyed correctly
+                # Convert emojis to text names
+                htmlSafe = escape(formatted)
+                emojiRemove = emoji.demojize(htmlSafe)
+                replaceNewlines = emojiRemove
+                finalText = replaceNewlines.replace("\r\n", "<br>").replace("\n", "<br>").replace(" ", "&nbsp")
+                PREFIX = '<div style="white-space: pre;">'
+                SUFFIX = '</div style="white-space: pre;">'
+                return PREFIX + finalText + SUFFIX
+        except Exception as e:
+            print(f"{encoding} failed for {file.resolve()}.")
 
+    return None
 
 path = getCodePath(sys.argv)
 excludePaths = getExcludePaths()
 files = getCodeFiles(path, excludePaths)
 
 pdf = FPDF()
+pdf.add_font(fname="FreeMono.ttf")
+pdf.set_font("FreeMono")
 pdf.add_page()
-
 
 bar = IncrementalBar('Processing', max=len(files))
 
 for file in files:
-    # bar.next()
+    bar.next()
     contents = getFormattedContents(file)
 
     if type(contents) != str:
+        print(f"{os.linesep}Skipped {file.resolve()}")
         continue
     try:
-        writeContent(pdf, file.name, f"<div>{contents}</div>")
+        writeContent(pdf, file.resolve(), f"<div>{contents}</div>")
     except Exception as e:
         print(f"{os.linesep}Failed to add {file.resolve()} to final PDF:")
-        print(e)
 
 
 pdf.output("html.pdf")
