@@ -23,7 +23,9 @@ def errorAndExit(message: str):
     print(message)
     exit(1)
 
+
 HEADER_FOOTER_PADDING = 4
+
 
 def addPadding(text: str, paddingText: str, amount: int):
     padding = paddingText * amount
@@ -87,7 +89,7 @@ def getExcludePaths():
 # rendered within PDF
 def getFormattedContents(file: Path):
     # lol
-    for encoding in ["UTF-8", "ascii"]: 
+    for encoding in ["UTF-8", "ascii"]:
         try:
             with file.open(mode='r', encoding=encoding) as f:
                 # Add pre tag to show code on page without formattting issues
@@ -101,7 +103,8 @@ def getFormattedContents(file: Path):
                 htmlSafe = escape(formatted)
                 emojiRemove = emoji.demojize(htmlSafe)
                 replaceNewlines = emojiRemove
-                finalText = replaceNewlines.replace("\r\n", "<br>").replace("\n", "<br>").replace(" ", "&nbsp")
+                finalText = replaceNewlines.replace("\r\n", "<br>").replace(
+                    "\n", "<br>").replace(" ", "&nbsp")
                 PREFIX = '<div style="white-space: pre;">'
                 SUFFIX = '</div style="white-space: pre;">'
                 return PREFIX + finalText + SUFFIX
@@ -109,6 +112,7 @@ def getFormattedContents(file: Path):
             print(f"{encoding} failed for {file.resolve()}.")
 
     return None
+
 
 path = getCodePath(sys.argv)
 excludePaths = getExcludePaths()
