@@ -452,3 +452,4 @@ wwwroot
 obj
 bin
 .vs
+.gitignore
