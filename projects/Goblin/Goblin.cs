@@ -2,7 +2,6 @@
 {
     class Goblin
     {
-
         private int _health = 100;
         private int _damage = 0;
         private int _speed = 100;
