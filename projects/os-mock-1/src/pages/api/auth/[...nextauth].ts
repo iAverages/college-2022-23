@@ -5,6 +5,12 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
 
+/**
+ * Configutation for NextAuth. An authentiation library build
+ * for NextJS. While in development this has been setup for
+ * Github oAuth login however during a prodution deployment
+ * this can be changed to whatever the client requires.
+ */
 export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/login",

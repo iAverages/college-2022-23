@@ -11,6 +11,9 @@ type BreadcrumbState = {
     remove: () => void;
 };
 
+/**
+ * Global store for breadcrumb data
+ */
 const useBreadcrumbsStore = create<BreadcrumbState>((set) => ({
     items: [],
     add: (item: BreadcrumbItem) => set((state) => ({ items: [...state.items, item] })),

@@ -12,8 +12,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useReactTable, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
 import Link from "next/link";
 
+// @tanstack/table builder
 const columnHelper = createColumnHelper<Assignment>();
 
+// Columns for course table
 const columns = [
     columnHelper.accessor("name", {
         cell: (info) => (
@@ -30,29 +32,39 @@ const columns = [
 ];
 
 const Course = () => {
+    // Add breadcrumb item
     useBreadcrumb({ href: "/courses", name: "Courses" });
+    // Create ref to access later for getting scroll distance
     const tableContainerRef = useRef<HTMLDivElement>(null);
+    // Sorting state of table
     const [sorting, setSorting] = useState<SortingState>([]);
 
+    // Get course data based on current route
     const { data: courseData, isLoading: isCourseLoading } = useCourseFromRoute();
+    // Get assignments for the course the user is accessing.
+    // Disable this query until we have an ID
     const { data, isFetching, fetchNextPage } = trpc.courses.assignments.useInfiniteQuery(
         { courseId: courseData?.id ?? "" },
         {
             enabled: !!courseData?.id,
-            getNextPageParam: (_lastGroup, groups) => _lastGroup.nextCursor,
+            getNextPageParam: (_lastGroup) => _lastGroup.nextCursor,
             keepPreviousData: true,
             refetchOnWindowFocus: false,
         }
     );
 
+    // Data is an array with the data we want inside of another array
+    // we use flatMap to merge these into one big array
+    // we use useMemo here to only run this if the data has changed
+    // this helps with some performance on biggest data sets
     const flatData = useMemo(() => data?.pages?.flatMap((page) => page.items) ?? [], [data]);
+
     const totalDBRows = data?.pages?.[0]?.meta?.totalDBRows ?? 0;
     const totalFetched = flatData.length;
 
     //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
     const fetchMoreOnBottomReached = useCallback(
         (containerRefElement?: HTMLDivElement | null) => {
-            console.log("scrolled");
             if (containerRefElement) {
                 const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
                 //once the user has scrolled within 300px of the bottom of the table, fetch more data if there is any
@@ -69,6 +81,7 @@ const Course = () => {
         fetchMoreOnBottomReached(tableContainerRef.current);
     }, [fetchMoreOnBottomReached]);
 
+    // Create @tanstack/table
     const table = useReactTable({
         data: flatData,
         columns,
@@ -81,10 +94,12 @@ const Course = () => {
         debugTable: true,
     });
 
+    // If we are loading, show loading spinner
     if (isCourseLoading) {
         return <Spinner fullScreen />;
     }
 
+    // Handle invalid course IDs
     if (!courseData) {
         return (
             <Layout>
@@ -93,6 +108,7 @@ const Course = () => {
         );
     }
 
+    // Display course inforation + assignments to user
     return (
         <Layout>
             <Box>{courseData.name}</Box>

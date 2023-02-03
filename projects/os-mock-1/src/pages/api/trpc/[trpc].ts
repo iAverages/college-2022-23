@@ -4,7 +4,11 @@ import { env } from "../../../env/server.mjs";
 import { createContext } from "../../../server/trpc/context";
 import { appRouter } from "../../../server/trpc/router/_app";
 
-// export API handler
+/**
+ * Create handler for trpc. TRPC helps to
+ * streamline frontend <-> backend communication
+ * and allows for typesafety between both sides
+ */
 export default createNextApiHandler({
     router: appRouter,
     createContext,

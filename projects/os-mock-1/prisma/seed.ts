@@ -83,7 +83,7 @@ const prisma = new PrismaClient();
 
         spinner.succeed(`Added ${user.name} (${user.id}) to ${course.name} (${created.id})`);
 
-        const numberOfAssignments = 5000;
+        const numberOfAssignments = 100;
 
         spinner = ora(
             `Creating ${numberOfAssignments} assignments for course ${course.name} (${created.id}). This might take a moment`
