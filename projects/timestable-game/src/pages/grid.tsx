@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { cn } from "~/utils/className";
+import * as Portal from "@radix-ui/react-portal";
 
 // + 1 to add border with time numbers;
-const LENGTH = 12 + 1;
-const HEIGHT = 12 + 1;
+const SIZE = 2;
+const LENGTH = SIZE + 1;
+const HEIGHT = SIZE + 1;
 
 type CellProps = {
     currentlySelected: string;
@@ -13,16 +15,21 @@ type CellProps = {
     column: number;
     name: string;
     onClick: () => void;
+    onCorrect: () => void;
 };
 
-const Cell = ({ onClick, name, column, currentlySelected, row }: CellProps) => {
+const Cell = ({ onCorrect, onClick, name, column, currentlySelected, row }: CellProps) => {
     const [givenValue, setGivenValue] = useState("");
     const [invalidInput, setInvalidInput] = useState("");
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+    useEffect(() => {
+        if (!isPopoverOpen && givenValue === `${column * row}`) onCorrect();
+    }, [onCorrect, row, column, givenValue, isPopoverOpen]);
+
     return (
         <Popover open={isPopoverOpen}>
-            <PopoverTrigger asChild onClick={() => setIsPopoverOpen(true)}>
+            <PopoverTrigger asChild onClick={() => givenValue === `${column * row}` || setIsPopoverOpen(true)}>
                 <div
                     className={cn(
                         "border-2 border-slate-600 p-4 text-center transition-all duration-150 hover:cursor-pointer hover:border-slate-400 hover:bg-slate-400",
@@ -52,6 +59,7 @@ const Cell = ({ onClick, name, column, currentlySelected, row }: CellProps) => {
                                 defaultValue={givenValue}
                                 className={cn("col-span-2 h-8", { "border-2 border-red-500": invalidInput !== "" })}
                                 onChange={(e) => {
+                                    if (!isPopoverOpen && givenValue === `${column * row}`) return;
                                     if (isNaN(+e.target.value)) {
                                         setInvalidInput("Please enter a number.");
                                         return;
@@ -75,6 +83,20 @@ const Cell = ({ onClick, name, column, currentlySelected, row }: CellProps) => {
 
 const Grid = () => {
     const [selectedGrid, setSelectedGrid] = useState("");
+    const [totalCorrect, setTotalCorrect] = useState(0);
+    const [isGameComplete, setGameComplete] = useState(false);
+
+    const onCorrect = useCallback(() => {
+        setTotalCorrect((prev) => prev + 1);
+    }, []);
+
+    useEffect(() => {
+        console.log("totalCorrect", totalCorrect);
+        console.log((LENGTH - 1) * (HEIGHT - 1));
+        if (totalCorrect === (LENGTH - 1) * (HEIGHT - 1)) {
+            setGameComplete(true);
+        }
+    }, [totalCorrect]);
 
     return (
         <>
@@ -82,7 +104,7 @@ const Grid = () => {
             <h2>How To Play!</h2>
             <p>Click on a grid cell, and enter the correct number for that grid cell.</p>
 
-            <div className="grid grid-cols-[repeat(13,_minmax(0,_1fr))] gap-1">
+            <div className="grid grid-cols-[repeat(3,_minmax(0,_1fr))] gap-1">
                 {Array.from(Array(LENGTH)).map((_, column) => {
                     return Array.from(Array(HEIGHT)).map((_, row) => {
                         const key = `${row}:${column}`;
@@ -108,11 +130,17 @@ const Grid = () => {
                                 name={key}
                                 row={row}
                                 onClick={() => setSelectedGrid(key)}
+                                onCorrect={onCorrect}
                             />
                         );
                     });
                 })}
             </div>
+            {isGameComplete && (
+                <Portal.Root>
+                    <div> Game complete</div>
+                </Portal.Root>
+            )}
         </>
     );
 };
