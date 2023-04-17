@@ -1,7 +1,4 @@
-import { Label } from "@radix-ui/react-context-menu";
-import { Settings2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "~/components/ui/button";
+import { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { cn } from "~/utils/className";
