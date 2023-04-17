@@ -143,7 +143,7 @@ const Grid = () => {
             <Separator />
             <h3>Highscore: {highscore?.grid}</h3>
 
-            <div className="grid grid-cols-[repeat(3,_minmax(0,_1fr))] gap-1">
+            <div className="grid grid-cols-[repeat(13,_minmax(0,_1fr))] gap-1">
                 {Array.from(Array(LENGTH)).map((_, column) => {
                     return (
                         <Fragment key={column}>
