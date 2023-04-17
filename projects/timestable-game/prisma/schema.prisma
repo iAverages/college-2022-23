@@ -10,8 +10,20 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
+model Game {
+    id     String   @id @default(cuid())
+    name   String
+    scores Scores[]
+}
+
+model User {
+    name      String   @id
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+}
+
+model Scores {
+    id     Int    @id @default(autoincrement())
+    gameId String
+
+    game Game @relation(fields: [gameId], references: [id])
 }
