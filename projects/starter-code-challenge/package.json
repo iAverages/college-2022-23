@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "inquirer": "^9.1.5"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "tsx": "^3.12.6"
+  }
+}
