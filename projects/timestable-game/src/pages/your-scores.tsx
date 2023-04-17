@@ -1,5 +1,14 @@
+import useLocalStorage from "~/hooks/useLocalStorage";
+
 const YourScores = () => {
-    return <>Your scores</>;
+    const [data] = useLocalStorage("scores", {});
+
+    return (
+        <>
+            Your scores
+            <div>{JSON.stringify(data)}</div>
+        </>
+    );
 };
 
 export default YourScores;

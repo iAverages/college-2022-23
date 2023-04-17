@@ -5,13 +5,16 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import Nav from "~/components/nav";
+import { DndContext } from "@dnd-kit/core";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
     return (
         <ThemeProvider>
-            <Nav>
-                <Component {...pageProps} />
-            </Nav>
+            <DndContext>
+                <Nav>
+                    <Component {...pageProps} />
+                </Nav>
+            </DndContext>
         </ThemeProvider>
     );
 };
