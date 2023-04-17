@@ -19,7 +19,7 @@ import useLocalGameStore from "~/hooks/useLocalGameStore";
 import { Separator } from "~/components/ui/separator";
 
 // + 1 to add border with time numbers;
-const SIZE = 2;
+const SIZE = 12;
 const LENGTH = SIZE + 1;
 const HEIGHT = SIZE + 1;
 
